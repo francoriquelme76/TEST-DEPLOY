@@ -1,14 +1,17 @@
-"""
-URL configuration for blog_noticias project.
-"""
+# blog_noticias/urls.py
 from django.contrib import admin
-from django.urls import path, include # 1. ¡IMPORTAR 'include'!
+from django.urls import path, include
+from django.contrib.auth import views as auth_views # ¡Necesitas esta importación!
 
 urlpatterns = [
-    # URL para el panel de administración
     path('admin/', admin.site.urls),
     
-    # 2. Conecta la raíz ('') del sitio a las URLs de la aplicación publicaciones
-    # Esto le dice a Django que busque las rutas en apps/publicaciones/urls.py
+    # ESTA LÍNEA DEBE SER LA ÚNICA QUE MANEJE EL LOGOUT
+    path('accounts/logout/', auth_views.LogoutView.as_view(
+        template_name='registration/logout.html'), name='logout'), 
+    
+    # El resto de la autenticación
+    path('accounts/', include('django.contrib.auth.urls')), 
+    
     path('', include('apps.publicaciones.urls')),
 ]

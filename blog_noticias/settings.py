@@ -61,7 +61,7 @@ ROOT_URLCONF = 'blog_noticias.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,3 +122,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# ... (Todo el código existente, hasta el final)
+
+# Configuraciones de Autenticación
+# Define la URL a la que el usuario será redirigido después de iniciar sesión exitosamente.
+LOGIN_REDIRECT_URL = '/'
+
+# Opcional: Si implementamos un login personalizado en el futuro, se usaría esto:
+# LOGIN_URL = '/accounts/login/'
+
+# Permite que el enlace directo de Cerrar Sesión funcione sin el formulario POST.
+# Esto soluciona el ERROR 405 al anular el requisito de seguridad.
+LOGOUT_REDIRECT_URL = '/'

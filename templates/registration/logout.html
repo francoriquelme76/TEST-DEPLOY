@@ -1,0 +1,8 @@
+<h2>¿Seguro que quieres cerrar sesión?</h2>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Sí, Cerrar Sesión</button>
+</form>
+<p>
+    <a href="{% url 'publicaciones:lista' %}">No, volver a la página principal</a>
+</p>

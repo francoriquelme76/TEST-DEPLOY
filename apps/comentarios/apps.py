@@ -1,9 +1,8 @@
+# apps/comentarios/apps.py
+
 from django.apps import AppConfig
 
-
 class ComentariosConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.comentarios'
-
-    label = 'comentarios'
-
-    verbose_name = 'Modulo de Comentarios'
+    verbose_name = 'Módulo de Comentarios'
