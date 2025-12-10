@@ -109,7 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# 🔴 CORRECCIÓN: Cambiar a español
+LANGUAGE_CODE = 'es-ar' # O usa 'es' si prefieres el español genérico
 
 TIME_ZONE = 'UTC'
 
@@ -123,15 +124,16 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# ... (Todo el código existente, hasta el final)
 
-# Configuraciones de Autenticación
-# Define la URL a la que el usuario será redirigido después de iniciar sesión exitosamente.
+# ⚙️ CONFIGURACIÓN DE AUTENTICACIÓN AÑADIDA ⚙️
+
+# URL a la que se redirige después de un inicio de sesión exitoso
 LOGIN_REDIRECT_URL = '/'
 
-# Opcional: Si implementamos un login personalizado en el futuro, se usaría esto:
-# LOGIN_URL = '/accounts/login/'
-
-# Permite que el enlace directo de Cerrar Sesión funcione sin el formulario POST.
-# Esto soluciona el ERROR 405 al anular el requisito de seguridad.
+# URL a la que se redirige después de un cierre de sesión exitoso
 LOGOUT_REDIRECT_URL = '/'
+
+# Opcional: Si la vista de login de Django necesita una ruta personalizada (no es necesario por ahora, pero ayuda si la plantilla falla)
+# LOGIN_URL = '/accounts/login/' 
+
+# Fin del archivo settings.py

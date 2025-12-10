@@ -1,8 +1,18 @@
-<h2>Iniciar Sesión</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Iniciar Sesión</button>
-</form>
+{% extends 'base.html' %}
 
-<p>¿Olvidaste tu contraseña? <a href="{% url 'password_reset' %}">Restablecer</a></p>
+{% block contenido %}
+    
+    <h2>Iniciar Sesión</h2>
+    
+    {# 🚨 Verifica que esta línea esté escrita correctamente. Debe ser 'form.as_p' #}
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit">Iniciar Sesión</button>
+        
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+
+{% endblock contenido %}

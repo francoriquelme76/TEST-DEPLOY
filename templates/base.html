@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Blog de Noticias{% endblock titulo %}</title>
+    </head>
+<body>
+
+    <header>
+        <h1><a href="{% url 'publicaciones:lista' %}">BLOG DE NOTICIAS</a></h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{% url 'publicaciones:lista' %}">Inicio</a></li>
+
+                {% if user.is_authenticated %}
+                    <li>Hola, <b>{{ user.username }}</b></li>
+                    
+                    {# 🔴 CORRECCIÓN CLAVE: Reemplazamos el enlace <a> por un formulario POST #}
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %} 
+                            {# Usamos un botón con estilo de enlace para que se vea igual que antes #}
+                            <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer; padding: 0;">
+                                Cerrar Sesión
+                            </button>
+                        </form>
+                    </li>
+                    
+                  {% else %} 
+                   <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                   <li><a href="{% url 'usuarios:registro' %}">Registro</a></li> 
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block contenido %}
+        {% endblock contenido %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Mi Primer Web Blog de Noticias</p>
+    </footer>
+
+</body>
+</html>
