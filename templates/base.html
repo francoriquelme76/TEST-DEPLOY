@@ -10,30 +10,39 @@
 
     <header>
         <h1><a href="{% url 'publicaciones:lista' %}">BLOG DE NOTICIAS</a></h1>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="{% url 'publicaciones:lista' %}">Inicio</a></li>
+        
+        {# 🚨 LÓGICA DE OCULTACIÓN: Si la ruta es login o registro, NO se muestra la barra de navegación. 🚨 #}
+        {% if request.path != '/accounts/login/' and request.path != '/usuarios/registro/' %}
+            <nav>
+                <ul class="nav-links">
+                    
+                    {# Renombramos 'Inicio' a 'Visualizar Publicaciones' #}
+                    <li><a href="{% url 'publicaciones:lista' %}">Visualizar Publicaciones</a></li>
 
-                {% if user.is_authenticated %}
-                    <li>Hola, <b>{{ user.username }}</b></li>
-                    
-                    {# 🔴 CORRECCIÓN CLAVE: Reemplazamos el enlace <a> por un formulario POST #}
-                    <li>
-                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                            {% csrf_token %} 
-                            {# Usamos un botón con estilo de enlace para que se vea igual que antes #}
-                            <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer; padding: 0;">
-                                Cerrar Sesión
-                            </button>
-                        </form>
-                    </li>
-                    
-                  {% else %} 
-                   <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
-                   <li><a href="{% url 'usuarios:registro' %}">Registro</a></li> 
-                {% endif %}
-            </ul>
-        </nav>
+                    {% if user.is_authenticated %}
+                        
+                        {# Enlace para crear una nueva publicación #}
+                        <li><a href="{% url 'publicaciones:crear' %}">Registrar Publicación</a></li>
+
+                        <li>Hola, <b>{{ user.username }}</b></li>
+                        
+                        {# Mantenemos el formulario POST para Cerrar Sesión #}
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                                {% csrf_token %} 
+                                <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer; padding: 0;">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                        
+                    {% else %} 
+                        <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                        <li><a href="{% url 'usuarios:registro' %}">Registro</a></li> 
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
     </header>
 
     <main>

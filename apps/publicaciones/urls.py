@@ -1,7 +1,6 @@
-# apps/publicaciones/urls.py
+# apps/publicaciones/urls.py (Versión Corregida)
 from django.urls import path
 from . import views
-from apps.usuarios.views import registro_usuario # ¡IMPORTAR LA NUEVA VISTA!
 
 # Define el "namespace" de la aplicación para evitar conflictos de nombres
 app_name = 'publicaciones'
@@ -13,7 +12,7 @@ urlpatterns = [
     # Ruta: /articulo/slug-del-articulo/ -> Muestra el artículo completo
     path('articulo/<slug:slug>/<int:pk>/', views.detalle_publicacion, name='detalle'),
     
-    # ¡NUEVA RUTA DE REGISTRO!
-    # Ruta: /registro/ -> Muestra el formulario de registro
-    path('registro/', registro_usuario, name='registro'),
+    # 🚨 NUEVA RUTA DE CREACIÓN (Implementación que hicimos en el paso anterior) 🚨
+    # Ruta: /crear/ -> Muestra el formulario para crear una nueva publicación
+    path('crear/', views.PublicacionCrearView.as_view(), name='crear'),
 ]

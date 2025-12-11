@@ -130,6 +130,9 @@ STATIC_URL = 'static/'
 # URL a la que se redirige después de un inicio de sesión exitoso
 LOGIN_REDIRECT_URL = '/'
 
+# URL a la que se redirige si el usuario necesita iniciar sesión (ej. al intentar publicar)
+LOGIN_URL = '/accounts/login/'
+
 # URL a la que se redirige después de un cierre de sesión exitoso
 LOGOUT_REDIRECT_URL = '/'
 

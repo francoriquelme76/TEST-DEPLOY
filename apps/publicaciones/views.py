@@ -1,10 +1,18 @@
-from django.shortcuts import render, get_object_or_404, redirect # Importar 'redirect'
-from django.contrib.auth.decorators import login_required # Para requerir autenticación en comentarios
+# apps/publicaciones/views.py
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required 
 from .models import Publicacion, Categoria
 # Importaciones para comentarios:
 from apps.comentarios.forms import ComentarioForm
 from apps.comentarios.models import Comentario 
 
+# 🚨 Importaciones de Vistas Basadas en Clases (CBV) 🚨
+from django.views.generic import CreateView 
+from django.contrib.auth.mixins import LoginRequiredMixin 
+from django.urls import reverse_lazy
+from django.utils.text import slugify 
+from .forms import PublicacionForm # <-- 🚨 IMPORTACIÓN CRÍTICA DEL FORMULARIO PERSONALIZADO 🚨
 
 # 1. Vista para la lista de publicaciones (Función)
 def lista_publicaciones(request):
@@ -18,7 +26,6 @@ def lista_publicaciones(request):
         'titulo': 'Blog de Noticias',
     }
     
-    # ¡Línea faltante! Esto renderiza el HTML:
     return render(request, 'publicaciones/lista_publicaciones.html', contexto) 
 
 
@@ -63,3 +70,29 @@ def detalle_publicacion(request, pk, slug):
     }
     
     return render(request, 'publicaciones/detalle_publicacion.html', contexto)
+
+# 3. Vista para crear una publicación (Clase)
+class PublicacionCrearView(LoginRequiredMixin, CreateView):
+    # El usuario debe estar autenticado
+    
+    model = Publicacion
+    
+    # 🚨 USAMOS EL FORMULARIO PERSONALIZADO (que hace el Slug opcional) 🚨
+    form_class = PublicacionForm 
+    
+    template_name = 'publicaciones/publicacion_form.html'
+    
+    # Redirige a la lista de publicaciones después de un guardado exitoso
+    success_url = reverse_lazy('publicaciones:lista') 
+    
+    # Sobreescribir el método form_valid para asignar el autor y el slug
+    def form_valid(self, form):
+        # 1. Asigna el usuario actualmente logueado (request.user) como el autor
+        form.instance.autor = self.request.user
+
+        # 2. Genera el slug si el usuario lo dejó vacío
+        if not form.instance.slug:
+            form.instance.slug = slugify(form.instance.titulo)
+            
+        return super().form_valid(form)
+    
