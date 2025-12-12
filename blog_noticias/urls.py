@@ -2,8 +2,9 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth import views as auth_views 
-# Nota: Ya no necesitamos from apps.usuarios import urls as usuarios_urls
+from django.conf import settings # Necesario para media/static en DEBUG
+from django.conf.urls.static import static # Necesario para media/static en DEBUG
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,23 +12,26 @@ urlpatterns = [
     # 1. URLs de la aplicación USUARIOS (REGISTRO)
     # Patrón: /cuentas/registro/
     path('cuentas/', include('apps.usuarios.urls', namespace='usuarios')), 
-
-    # 2. LOGIN (Forzamos la plantilla que debe usar)
-    # Patrón: /accounts/login/
-    path('accounts/login/', 
-         auth_views.LoginView.as_view(template_name='registration/login.html'), 
-         name='login'),
     
-    # 3. LOGOUT (Forzamos la plantilla que debe usar)
-    # Patrón: /accounts/logout/
-    path('accounts/logout/', 
-         auth_views.LogoutView.as_view(template_name='registration/logout.html'), 
-         name='logout'), 
+    # 2. LOGIN, LOGOUT, PASSWORD RESET, etc. (Usamos el set completo de Django)
+    # Patrón: /cuentas/login/, /cuentas/logout/, etc.
+    path('cuentas/', include('django.contrib.auth.urls')),
     
-    # 4. URLs de publicaciones
+    # 3. URLs de la aplicación COMENTARIOS
+    # ¡CRÍTICO! Esto registra el namespace 'comentarios' que tu plantilla necesita.
+    # Patrón: /comentarios/
+    path('comentarios/', include('apps.comentarios.urls', namespace='comentarios')),
+    
+    # 4. URLs de publicaciones (Home)
+    # Patrón: /
     path('', include('apps.publicaciones.urls')),
-    
-    # IMPORTANTE: Aquí se incluirían las URLs de restablecimiento de contraseña (password reset),
-    # pero las omitimos para simplificar si no las estás usando.
-    # Si las necesitas: path('accounts/', include('django.contrib.auth.urls')), PERO SIN LOGIN NI LOGOUT EXPLICITOS
 ]
+
+# Configuración para servir archivos MEDIA y STATIC durante el desarrollo (DEBUG=True)
+if settings.DEBUG:
+    # Si usas archivos subidos por el usuario (imágenes de publicaciones, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
+    # Nota: Los archivos STATIC ya suelen ser servidos por runserver, 
+    # pero esta línea es útil si tienes configuraciones específicas.
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

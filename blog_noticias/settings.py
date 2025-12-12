@@ -16,7 +16,7 @@ import sys
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+# Agrega la carpeta 'apps' al path para que Django encuentre las aplicaciones anidadas
 sys.path.insert(0, str(BASE_DIR / "apps"))
 
 
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Aplicaciones Personalizadas (Usando la ruta completa para evitar RuntimeError)
     'apps.usuarios.apps.UsuariosConfig',
     'apps.publicaciones.apps.PublicacionesConfig',
     'apps.comentarios.apps.ComentariosConfig',
@@ -109,8 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-# 🔴 CORRECCIÓN: Cambiar a español
-LANGUAGE_CODE = 'es-ar' # O usa 'es' si prefieres el español genérico
+LANGUAGE_CODE = 'es-ar' 
 
 TIME_ZONE = 'UTC'
 
@@ -124,19 +125,19 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# CONFIGURACIÓN DE MEDIA (Archivos subidos por el usuario)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-# ⚙️ CONFIGURACIÓN DE AUTENTICACIÓN AÑADIDA ⚙️
 
+# CONFIGURACIÓN DE AUTENTICACIÓN
 # URL a la que se redirige después de un inicio de sesión exitoso
 LOGIN_REDIRECT_URL = '/'
 
-# URL a la que se redirige si el usuario necesita iniciar sesión (ej. al intentar publicar)
-LOGIN_URL = '/accounts/login/'
+# URL a la que se redirige si el usuario necesita iniciar sesión
+LOGIN_URL = '/cuentas/login/' 
 
 # URL a la que se redirige después de un cierre de sesión exitoso
 LOGOUT_REDIRECT_URL = '/'
-
-# Opcional: Si la vista de login de Django necesita una ruta personalizada (no es necesario por ahora, pero ayuda si la plantilla falla)
-# LOGIN_URL = '/accounts/login/' 
 
 # Fin del archivo settings.py

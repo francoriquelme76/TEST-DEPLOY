@@ -11,34 +11,38 @@
     <header>
         <h1><a href="{% url 'publicaciones:lista' %}">BLOG DE NOTICIAS</a></h1>
         
-        {# 🚨 LÓGICA DE OCULTACIÓN: Si la ruta es login o registro, NO se muestra la barra de navegación. 🚨 #}
+        {# Ocultar la navegación principal en Login/Registro #}
         {% if request.path != '/accounts/login/' and request.path != '/usuarios/registro/' %}
             <nav>
                 <ul class="nav-links">
                     
-                    {# Renombramos 'Inicio' a 'Visualizar Publicaciones' #}
-                    <li><a href="{% url 'publicaciones:lista' %}">Visualizar Publicaciones</a></li>
-
+                    {# 1. VISUALIZAR UNA CATEGORÍA (Visible para todos) #}
+                    {# El enlace usa un parámetro GET para que lista_publicaciones.html sepa que debe mostrar las opciones de categoría #}
+                    <li><a href="{% url 'publicaciones:lista' %}?mostrar_categorias=true">Visualizar una Categoría</a></li> 
+                    
                     {% if user.is_authenticated %}
                         
-                        {# Enlace para crear una nueva publicación #}
-                        <li><a href="{% url 'publicaciones:crear' %}">Registrar Publicación</a></li>
-
+                        {# OPCIONES DE COLABORADOR REGISTRADO #}
                         <li>Hola, <b>{{ user.username }}</b></li>
                         
-                        {# Mantenemos el formulario POST para Cerrar Sesión #}
+                        {# 2. REGISTRAR UNA PUBLICACION (Publicar) #}
+                        <li><a href="{% url 'publicaciones:crear' %}">Registrar Publicación</a></li>
+                        
+                        {# 3. CERRAR SESIÓN #}
                         <li>
                             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                                 {% csrf_token %} 
-                                <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer; padding: 0;">
-                                    Cerrar Sesión
-                                </button>
+                                <button type="submit" style="border: none; background: none; color: inherit; cursor: pointer; padding: 0;">Cerrar Sesión</button>
                             </form>
                         </li>
                         
                     {% else %} 
+                        {# OPCIONES DE VISITANTE ANÓNIMO #}
+                        
+                        {# 2. REGÍSTRATE COMO VISITANTE #}
+                        <li><a href="{% url 'usuarios:registro' %}">Regístrate como Visitante</a></li> 
                         <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
-                        <li><a href="{% url 'usuarios:registro' %}">Registro</a></li> 
+                        
                     {% endif %}
                 </ul>
             </nav>
@@ -47,6 +51,14 @@
 
     <main>
         {% block contenido %}
+        
+        {# MENSAJE PARA VISITANTES ANÓNIMOS EN LA PÁGINA PRINCIPAL #}
+        {% if not user.is_authenticated and request.path == '/' %}
+            <div style="border-left: 5px solid #007bff; padding: 10px; margin-bottom: 20px; background-color: #e9f7fe;">
+                <p>Obs. Si quieres dejar tu comentario sobre una Publicación, haz clic sobre el Título de la Publicación y te pediremos iniciar sesión.</p>
+            </div>
+        {% endif %}
+
         {% endblock contenido %}
     </main>
 
