@@ -1,18 +1,20 @@
-{% extends 'publicaciones/base.html' %}
+{% extends 'base.html' %} 
+{% comment %} 
+    Extiende 'base.html' (encontrado en el DIRS del proyecto)
+{% endcomment %}
+
+{% block title %}
+    Últimas Noticias | {{ titulo }}
+{% endblock title %}
 
 {% block contenido %}
 
+<div class="container mt-5">
     <h2>Últimas Publicaciones</h2>
-    
-    {% for publicacion in object_list %}
-    <article>
-        <h3><a href="{% url 'publicaciones:detalle' slug=publicacion.slug pk=publicacion.pk %}">{{ publicacion.titulo }}</a></h3>
-        <p>Categoría: **{{ publicacion.categoria.nombre }}** | Autor: **{{ publicacion.autor.username }}**</p>
-        <p>{{ publicacion.contenido|truncatewords:20 }}</p> 
-        <hr>
-    </article>
-    {% empty %}
-        <p>No hay publicaciones disponibles.</p>
-    {% endfor %}
+    <div class="row">
+        {% for publicacion in object_list %}
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock contenido %}

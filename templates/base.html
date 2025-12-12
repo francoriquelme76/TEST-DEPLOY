@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Blog de Noticias{% endblock title %}</title>
+    
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+
+    {% block extra_css %}
+    {% endblock extra_css %}
+
+</head>
+<body>
+    
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'publicaciones:lista' %}">Inicio</a></li>
+                <li><a href="{% url 'publicaciones:acerca' %}">Acerca de</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropbtn" onclick="toggleMenu()">Categorías ▾</a> 
+
+                    <ul id="miDropdown" class="dropdown-content">
+                        
+                        <li><a href="{% url 'publicaciones:lista' %}">Todas las publicaciones</a></li>
+                        <div class="dropdown-divider"></div>
+
+                        {% for category in categories %} 
+                            <li>
+                                <a href="{% url 'publicaciones:category_posts' category_slug=category.slug %}">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% if user.is_authenticated %}
+                    <li style="color: white; margin-right: 15px;">Hola, {{ user.username }}</li>
+                    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                    <li><a href="Form.html">Contacto</a></li>
+                {% else %}
+                    <li><a href="{% url 'publicaciones:registro' %}">Registro</a></li>
+                    <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block contenido %}
+        {% endblock contenido %}
+    </main>
+
+    <footer>
+        <div class="footer-bottom-minimal">
+            <p>
+                &copy; {% now "Y" %}. Todos los derechos reservados.
+            </p>
+        </div>
+    </footer>
+
+    {% block scripts %}
+    {% endblock scripts %}
+
+    <script>
+        // Función para abrir/cerrar el menú
+        function toggleMenu() {
+            document.getElementById("miDropdown").classList.toggle("mostrar");
+        }
+
+        // Función Opcional: Cerrar el menú si haces clic fuera de él
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('mostrar')) {
+                        openDropdown.classList.remove('mostrar');
+                    }
+                }
+            }
+        }
+    </script>
+
+
+</body>
+</html>
