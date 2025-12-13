@@ -38,14 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-<<<<<<< HEAD
-    # Aplicaciones locales:
-=======
     # Aplicaciones Personalizadas (Usando la ruta completa para evitar RuntimeError)
->>>>>>> 4f114730af45f235e4354b8ed00145427861897c
     'apps.usuarios.apps.UsuariosConfig',
     'apps.publicaciones.apps.PublicacionesConfig',
-    'apps.comentarios.apps.ComentariosConfig',
+    'apps.comentarios.apps.ComentariosConfig', # <-- ¡Tu app de comentarios incluida!
 ]
 
 MIDDLEWARE = [
@@ -134,33 +130,26 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-<<<<<<< HEAD
-# 🌟 AGREGAR ESTA LÍNEA 🌟
-# Directorios adicionales donde Django buscará archivos estáticos
+# 🌟 CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS (TU CÓDIGO)
+# Directorios adicionales donde Django buscará archivos estáticos (para base.html, etc.)
 STATICFILES_DIRS = [
     BASE_DIR / "static", # Apunta a la carpeta 'static' en la raíz del proyecto
 ]
-=======
-# CONFIGURACIÓN DE MEDIA (Archivos subidos por el usuario)
+
+
+# CONFIGURACIÓN DE MEDIA (Archivos subidos por el usuario - CÓDIGO DE FRANCO)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
->>>>>>> 4f114730af45f235e4354b8ed00145427861897c
 
 
-# CONFIGURACIÓN DE AUTENTICACIÓN
+# CONFIGURACIÓN DE AUTENTICACIÓN (Ambos bloques fusionados)
 # URL a la que se redirige después de un inicio de sesión exitoso
 LOGIN_REDIRECT_URL = '/'
 
-<<<<<<< HEAD
-# Permite que el enlace directo de Cerrar Sesión funcione sin el formulario POST.
-# Esto soluciona el ERROR 405 al anular el requisito de seguridad.
-LOGOUT_REDIRECT_URL = '/'
-=======
-# URL a la que se redirige si el usuario necesita iniciar sesión
+# URL a la que se redirige si el usuario necesita iniciar sesión (Código de Franco)
 LOGIN_URL = '/cuentas/login/' 
 
-# URL a la que se redirige después de un cierre de sesión exitoso
-LOGOUT_REDIRECT_URL = '/'
+# URL a la que se redirige después de un cierre de sesión exitoso (Ambos tenían el mismo)
+LOGOUT_REDIRECT_URL = '/' 
 
 # Fin del archivo settings.py
->>>>>>> 4f114730af45f235e4354b8ed00145427861897c

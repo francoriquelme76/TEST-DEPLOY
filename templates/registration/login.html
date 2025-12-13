@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-<<<<<<< HEAD
 {% load static %}
 
 {% block title %}Iniciar Sesión{% endblock title %}
@@ -13,6 +12,7 @@
     <div class="form-card mx-auto">
         <h2 class="form-title text-center mb-4">🔑 Iniciar Sesión</h2>
         
+        {# Muestra errores no relacionados con campos específicos #}
         {% if form.errors and form.non_field_errors %}
             <div class="alert alert-danger mb-4">
                 {% for error in form.non_field_errors %}
@@ -35,28 +35,17 @@
             {% endfor %}
 
             <button type="submit" class="btn-submit">Iniciar Sesión</button>
+            
+            {# Añadimos el campo hidden 'next' para la redirección después del login #}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+
         </form>
 
         <p class="mt-4 text-center">
             ¿Olvidaste tu contraseña? <a href="{% url 'password_reset' %}" class="link-reset">Restablecer</a>
         </p>
     </div>
-=======
-
-{% block contenido %}
-    
-    <h2>Iniciar Sesión</h2>
-    
-    {# 🚨 Verifica que esta línea esté escrita correctamente. Debe ser 'form.as_p' #}
-    <form method="post">
-        {% csrf_token %}
-        
-        {{ form.as_p }}
-        
-        <button type="submit">Iniciar Sesión</button>
-        
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
->>>>>>> 4f114730af45f235e4354b8ed00145427861897c
 
 {% endblock contenido %}

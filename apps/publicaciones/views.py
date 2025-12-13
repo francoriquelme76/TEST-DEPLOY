@@ -164,3 +164,11 @@ class PublicacionEliminarView(PermissionRequiredMixin, UserPassesTestMixin, Dele
     def test_func(self):
         publicacion = self.get_object()
         return publicacion.autor == self.request.user or self.request.user.has_perm('publicaciones.delete_publicacion')
+
+# 7. Vista para la página Acerca de (FUNCIÓN AÑADIDA PARA RESOLVER EL AttributeError)
+def acerca_de(request):
+    """
+    Vista simple para mostrar la página 'Acerca de'.
+    (Necesita la plantilla publicaciones/acerca_de.html)
+    """
+    return render(request, 'publicaciones/acerca_de.html')

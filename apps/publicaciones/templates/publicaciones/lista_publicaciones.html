@@ -1,24 +1,9 @@
-<<<<<<< HEAD
 {% extends 'base.html' %} 
-{% comment %} 
-    Extiende 'base.html' (encontrado en el DIRS del proyecto)
-{% endcomment %}
 
 {% block title %}
-    Últimas Noticias | {{ titulo }}
+    {# Usamos el título que viene del contexto (lista_publicaciones) #}
+    Últimas Noticias | {% if titulo %}{{ titulo }}{% else %}Inicio{% endif %}
 {% endblock title %}
-
-{% block contenido %}
-
-<div class="container mt-5">
-    <h2>Últimas Publicaciones</h2>
-    <div class="row">
-        {% for publicacion in object_list %}
-        {% endfor %}
-    </div>
-</div>
-=======
-{% extends 'base.html' %}
 
 {% block contenido %}
 
@@ -26,7 +11,7 @@
     <h2>{% if categoria_actual %}Noticias de {{ categoria_actual.nombre }}{% else %}Últimas Publicaciones{% endif %}</h2>
     
     {# ----------------------------------------------------------- #}
-    {# 🚨 LEYENDA DE GUÍA PARA VISITANTES ANÓNIMOS (CORRECCIÓN AÑADIDA) 🚨 #}
+    {# 🚨 LEYENDA DE GUÍA PARA VISITANTES ANÓNIMOS 🚨 #}
     {% if not user.is_authenticated %}
     <div style="background-color: #f0f8ff; border: 1px solid #cceeff; padding: 10px; margin-bottom: 20px; border-radius: 5px; color: #333;">
         <p style="margin: 0;">
@@ -37,7 +22,6 @@
     {# ----------------------------------------------------------- #}
 
     {# 🚨 INICIO DE LA LÓGICA DE CATEGORÍAS 🚨 #}
-    {# CORRECCIÓN: El menú se muestra siempre que la lista 'categorias' no esté vacía, eliminando la condición de GET #}
     {% if categorias %}
         <h3>Selecciona una Categoría:</h3>
         <ul style="list-style: none; padding: 0;">
@@ -79,6 +63,5 @@
     {% empty %}
         <p>No hay publicaciones disponibles en esta sección {% if categoria_actual %}para la categoría "{{ categoria_actual.nombre }}"{% endif %}.</p>
     {% endfor %}
->>>>>>> 4f114730af45f235e4354b8ed00145427861897c
 
 {% endblock contenido %}
