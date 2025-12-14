@@ -129,17 +129,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'staticfiles')
 
-# 🌟 CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS (TU CÓDIGO)
 # Directorios adicionales donde Django buscará archivos estáticos (para base.html, etc.)
-STATICFILES_DIRS = [
-    BASE_DIR / "static", # Apunta a la carpeta 'static' en la raíz del proyecto
-]
+STATICFILES_DIRS = (os.path.join(os.path.dirname(BASE_DIR), 'static'),)
 
 
 # CONFIGURACIÓN DE MEDIA (Archivos subidos por el usuario - CÓDIGO DE FRANCO)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
 
 
 # CONFIGURACIÓN DE AUTENTICACIÓN (Ambos bloques fusionados)
