@@ -33,7 +33,7 @@
 
     <hr>
     
-    {# 🚨 CORRECCIÓN 1: Usar publicacion.comentarios.all para acceder a la lista 🚨 #}
+    {# 🚨 COMENTARIOS 🚨 #}
     <h3 class="mt-4">Comentarios ({{ publicacion.comentarios.count }})</h3>
     
     {% for comentario in publicacion.comentarios.all %}
@@ -58,7 +58,7 @@
 
     <hr>
 
-    {# 🚨 SECCIÓN COMENTAR: Usamos 'form' si es el nombre con el que se pasa desde la vista 🚨 #}
+    {# 🚨 SECCIÓN COMENTAR: Formulario o Enlaces de Acceso 🚨 #}
     {% if user.is_authenticated %}
         <h4>Deja tu comentario</h4>
         {# El action del formulario debe apuntar a la URL de tu vista agregar_comentario #}
@@ -71,7 +71,18 @@
             <button type="submit">Enviar Comentario</button>
         </form>
     {% else %}
-        <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para comentar.</p>
+        {# ----------------------------------------------------------------------------------- #}
+        {# 🚨 CORRECCIÓN UX APLICADA AQUÍ 🚨 #}
+        <div style="background-color: #ffe; border: 1px solid #ffd700; padding: 15px; margin-top: 20px; border-radius: 5px;">
+            <p style="font-weight: bold; margin-bottom: 10px;">Para dejar un comentario, debes iniciar sesión o registrarte.</p>
+            <a href="{% url 'login' %}" style="margin-right: 15px; padding: 8px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;">
+                Iniciar Sesión
+            </a>
+            <a href="{% url 'usuarios:registro' %}" style="padding: 8px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 4px;">
+                Registrarse
+            </a>
+        </div>
+        {# ----------------------------------------------------------------------------------- #}
     {% endif %}
 
 {% endblock contenido %}
