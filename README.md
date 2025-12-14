@@ -1,3 +1,4 @@
+
 # Blog-de-noticias
 
 Un proyecto de un Blog de noticias enfocado a la Tecnología Agrícola y su desarrollo. El objetivo es proporcionar una plataforma robusta para la publicación, gestión y lectura de artículos de noticias sobre todo lo relacionado a este rubro y su amplio campo.
@@ -6,3 +7,4 @@ Está diseñado en Python con Django para la lógica del blog, SQLite3 para la g
 
 
 Integrantes del Proyecto: Franco Riquelme, Juan de Dios Candia, Tiago Dominguez, Santiago Portillo.
+
