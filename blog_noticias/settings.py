@@ -125,20 +125,21 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
+# --- Static files ---
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'staticfiles')
 
-# Directorios adicionales donde Django buscará archivos estáticos (para base.html, etc.)
-STATICFILES_DIRS = (os.path.join(os.path.dirname(BASE_DIR), 'static'),)
+# Aquí se recopilarán todos los estáticos (usado por collectstatic)
+STATIC_ROOT = BASE_DIR / 'staticfiles_collected' 
+
+# Directorios adicionales donde Django buscará archivos estáticos (tu carpeta 'static' global)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 
-# CONFIGURACIÓN DE MEDIA (Archivos subidos por el usuario - CÓDIGO DE FRANCO)
+# --- Media files (Archivos subidos por el usuario) ---
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
-
+MEDIA_ROOT = BASE_DIR / 'media_files'
 
 # CONFIGURACIÓN DE AUTENTICACIÓN (Ambos bloques fusionados)
 # URL a la que se redirige después de un inicio de sesión exitoso
