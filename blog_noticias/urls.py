@@ -15,7 +15,7 @@ urlpatterns = [
     
     #2 Login personalizado para redireccion de usuarios logueados
     path('cuentas/login/', auth_views.LoginView.as_view(
-        template_name='usuarios/login.html',
+        template_name='registration/login.html',
         redirect_authenticated_user=True
     ), name='login'),
     # 3. LOGOUT, PASSWORD RESET, etc.
