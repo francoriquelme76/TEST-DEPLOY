@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Eliminar Publicación{% endblock titulo %}
+
+{% block contenido %}
+    <h2>¿Estás seguro de que quieres eliminar esta publicación?</h2>
+    <p>Esta acción no se puede deshacer. Vas a borrar: <strong>"{{ object.titulo }}"</strong></p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Sí, estoy re seguro.
+        </button>
+        <a href="{% url 'publicaciones:detalle' pk=object.pk slug=object.slug %}" style="margin-left: 15px; text-decoration: none; color: #666;">
+            Cancelar y volver
+        </a>
+    </form>
+{% endblock contenido %}

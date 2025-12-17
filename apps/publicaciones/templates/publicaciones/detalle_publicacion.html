@@ -20,11 +20,17 @@
         <hr>
 
         {# LÓGICA DE EDICIÓN: El botón solo aparece si el usuario logueado es el autor #}
-        {% if user.is_authenticated and user == publicacion.autor %}
+        {% if user.is_authenticated and user == publicacion.autor or user.is_superuser %}
             <p>
                 {# Usamos la URL 'publicaciones:editar' que definimos en urls.py #}
                 <a href="{% url 'publicaciones:editar' pk=publicacion.pk %}">
                     <button>Editar Publicación</button>
+                </a>
+                {# Botón de Eliminar #}
+                <a href="{% url 'publicaciones:eliminar' pk=publicacion.pk %}" style="margin-left: 10px;">
+                    <button style="background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                        Eliminar
+                    </button>
                 </a>
             </p>
         {% endif %}

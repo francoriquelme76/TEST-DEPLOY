@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-wl!#++c=gexp_8c!2_53=ktr7&%^$y$0#kxjb0p*gz2l_%0y*n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['francoriquelmeInformatorio.pythonanywhere.com']
+ALLOWED_HOSTS = ['francoriquelmeInformatorio.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -143,12 +143,12 @@ MEDIA_ROOT = BASE_DIR / 'media_files'
 
 # CONFIGURACIÓN DE AUTENTICACIÓN (Ambos bloques fusionados)
 # URL a la que se redirige después de un inicio de sesión exitoso
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'publicaciones:lista'
 
 # URL a la que se redirige si el usuario necesita iniciar sesión (Código de Franco)
 LOGIN_URL = '/cuentas/login/' 
 
 # URL a la que se redirige después de un cierre de sesión exitoso (Ambos tenían el mismo)
-LOGOUT_REDIRECT_URL = '/' 
+LOGOUT_REDIRECT_URL = 'publicaciones:lista' 
 
 # Fin del archivo settings.py

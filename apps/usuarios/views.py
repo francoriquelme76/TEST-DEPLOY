@@ -10,9 +10,13 @@ from django.contrib.auth.forms import UserCreationForm # Usamos el formulario es
 
 # Vista para manejar el registro de nuevos usuarios
 def registro_usuario(request):
-    # Usamos el formulario estándar de Django (UserCreationForm)
-    # Si tienes tu propio forms.py, descomenta la línea de arriba y usa FormularioRegistroUsuario
-    form_class_to_use = UserCreationForm # Cambiar a FormularioRegistroUsuario si existe y está definido
+
+    # Validacion de seguridad
+    # si el usuario ya esta autenticado, es redirigido
+    if request.user.is_authenticated:
+        return redirect('publicaciones:lista')
+
+    form_class_to_use = UserCreationForm 
     
     if request.method == 'POST':
         # Procesar los datos enviados por el usuario
@@ -25,7 +29,6 @@ def registro_usuario(request):
             login(request, user)
             
             # Redirigir a la página de inicio.
-            # Asumo que la URL principal de la app 'publicaciones' se llama 'lista'.
             return redirect('publicaciones:lista') 
     else:
         # Mostrar el formulario vacío si es una petición GET

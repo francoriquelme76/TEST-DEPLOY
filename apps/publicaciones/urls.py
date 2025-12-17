@@ -47,6 +47,9 @@ urlpatterns = [
     # Patrón: /acerca/
     path('acerca/', views.acerca_de, name='acerca'),
 
+    # 8. RUTA CONTACTO
+    path('contacto/', views.contacto, name='contacto'),
+
     # NOTA IMPORTANTE: La ruta de 'registro' se mantiene en blog_noticias/urls.py 
     # y apunta a la app usuarios. Se omite aquí.
 ]

@@ -13,34 +13,56 @@ from apps.comentarios.forms import ComentarioForm
 from apps.comentarios.models import Comentario 
 
 # Importaciones de Vistas Basadas en Clases (CBV) y Mixins de Seguridad
-from django.views.generic import CreateView, UpdateView, DeleteView 
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin 
 
+from django.db.models import Count
 
-# 1. Vista para la lista de publicaciones (Función, mejorada para categorías)
+
+class explorarPublicaciones(ListView):
+    model = Publicacion
+    template_name = 'publicaciones/lista_publicaciones.html' 
+    context_object_name = 'publicaciones'
+    paginate_by = 10 
+
+    def get_queryset(self):
+        queryset = Publicacion.objects.all()
+        # 1. Contamos los comentarios y añadimos el campo num_comentarios
+        queryset = queryset.annotate(num_comentarios=Count('comentarios'))
+
+        # 2. Obtenemos el parámetro 'orden' de la URL (por defecto, 'reciente')
+        orden = self.request.GET.get('orden', 'reciente') 
+
+        # 3. ORDENAR
+        if orden == 'antiguo':
+            # Mas antiguas primero
+            queryset = queryset.order_by('fecha_creacion')
+            
+        elif orden == 'comentarios':
+            # Mas populares primero (el signo '-' indica el orden descendente)
+            queryset = queryset.order_by('-num_comentarios', '-fecha_creacion') 
+            
+        else:
+            # Mas recientes primero
+            queryset = queryset.order_by('-fecha_creacion')
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # 4. Guarda el orden actual para que la plantilla resalte el botón en HTML
+        context['orden_actual'] = self.request.GET.get('orden', 'reciente')
+        context['categorias'] = Categoria.objects.all() 
+        context['puede_crear'] = self.request.user.is_authenticated and self.request.user.has_perm('publicaciones.add_publicacion')
+        return context
+
+
+# 1. Vista para la lista de publicaciones
 def lista_publicaciones(request):
     """
-    Obtiene todas las publicaciones y todas las categorías para la navegación.
-    (Visitante Anónimo y Registrado - Nivel 1 y 2)
+    Mantiene la compatibilidad con el urls.py anterior, usando la nueva funcion explorarPublicaciones.
     """
-    publicaciones = Publicacion.objects.all().order_by('-fecha_creacion')
-    categorias = Categoria.objects.all()
-    
-    # 🚨 INICIO DE LA CORRECCIÓN 🚨
-    # Verificamos si el usuario tiene el permiso de crear publicaciones (Colaborador)
-    puede_crear = request.user.is_authenticated and request.user.has_perm('publicaciones.add_publicacion')
-    # 🚨 FIN DE LA CORRECCIÓN 🚨
-    
-    contexto = {
-        'object_list': publicaciones,
-        'titulo': 'Últimas Publicaciones',
-        'categorias': categorias, # Pasamos las categorías a la plantilla
-        # 🚨 PASAMOS LA VARIABLE BOLEANA AL CONTEXTO 🚨
-        'puede_crear': puede_crear,
-    }
-    
-    return render(request, 'publicaciones/lista_publicaciones.html', contexto) 
-
+    return explorarPublicaciones.as_view()(request)
 
 # 2. Vista para el detalle de un artículo (Función con lógica de Comentarios)
 def detalle_publicacion(request, pk, slug):
@@ -57,7 +79,7 @@ def detalle_publicacion(request, pk, slug):
     # Obtener solo los comentarios aprobados de esta publicación
     comentarios = publicacion.comentarios.filter(aprobado=True) 
     
-    # 🚨 CORRECCIÓN CLAVE: Inicializar el formulario aquí para pasarlo al contexto
+    # Inicializamos el formulario aca para pasarlo al contexto
     comentario_form = ComentarioForm() 
     
     contexto = {
@@ -74,7 +96,7 @@ class PublicacionCrearView(PermissionRequiredMixin, CreateView):
     """
     Permite a los Colaboradores crear una publicación.
     """
-    # 🚨 RESTRICCIÓN Nivel 3: Solo si tiene el permiso asignado al grupo COLABORADORES 🚨
+    # Solo si tiene el permiso asignado al grupo COLABORADORES 🚨
     permission_required = 'publicaciones.add_publicacion'
     
     model = Publicacion
@@ -108,7 +130,7 @@ class PublicacionEditarView(PermissionRequiredMixin, UserPassesTestMixin, Update
     def get_success_url(self):
         return reverse('publicaciones:detalle', kwargs={'pk': self.object.pk, 'slug': self.object.slug})
     
-    # Método CRÍTICO: Comprueba si el usuario logueado es el autor
+    # Comprueba si el usuario logueado es el autor
     def test_func(self):
         publicacion = self.get_object()
         # Permitir la edición si es el autor O si el usuario tiene el permiso de cambio global
@@ -125,25 +147,32 @@ class PublicacionEditarView(PermissionRequiredMixin, UserPassesTestMixin, Update
 def publicaciones_por_categoria(request, slug_categoria):
     """
     Muestra la lista de publicaciones filtrada por una categoría específica.
-    (Visitante Anónimo y Registrado - Nivel 1 y 2)
     """
     categoria = get_object_or_404(Categoria, slug=slug_categoria)
     publicaciones = Publicacion.objects.filter(categoria=categoria).order_by('-fecha_creacion')
     
-    # Pasamos todas las categorías para que el menú de categorías siga funcionando
-    categorias = Categoria.objects.all()
+    orden = request.GET.get('orden','reciente')
+
+    publicaciones = publicaciones.filter(categoria=categoria).annotate(
+        num_comentarios = Count('comentarios')
+        )
     
-    # 🚨 INICIO DE LA CORRECCIÓN 🚨
+    if orden == 'antiguo':
+        publicaciones = publicaciones.order_by('fecha_creacion')
+    elif orden == 'comentarios':
+        publicaciones = publicaciones.order_by('-num_comentarios','fecha_creacion')
+    else:
+        publicaciones = publicaciones.order_by('-fecha_creacion')
+
     # Verificamos si el usuario tiene el permiso de crear publicaciones (Colaborador)
     puede_crear = request.user.is_authenticated and request.user.has_perm('publicaciones.add_publicacion')
-    # 🚨 FIN DE LA CORRECCIÓN 🚨
     
     contexto = {
         'object_list': publicaciones,
         'titulo': f'Noticias de {categoria.nombre}', 
-        'categorias': categorias, 
+        'categorias': Categoria.objects.all(), 
         'categoria_actual': categoria,
-        # 🚨 PASAMOS LA VARIABLE BOLEANA AL CONTEXTO 🚨
+        'orden_actual': orden,
         'puede_crear': puede_crear,
     }
     
@@ -157,7 +186,7 @@ class PublicacionEliminarView(PermissionRequiredMixin, UserPassesTestMixin, Dele
     # 🚨 RESTRICCIÓN Nivel 3
     permission_required = 'publicaciones.delete_publicacion'
     model = Publicacion
-    template_name = 'publicaciones/publicacion_confirm_delete.html' # Debes crear esta plantilla
+    template_name = 'publicaciones/eliminar_publicacion.html'
     success_url = reverse_lazy('publicaciones:lista') 
 
     # Solo permite eliminar si es el autor o tiene el permiso global de eliminar
@@ -171,4 +200,10 @@ def acerca_de(request):
     Vista simple para mostrar la página 'Acerca de'.
     (Necesita la plantilla publicaciones/acerca_de.html)
     """
-    return render(request, 'publicaciones/acerca_de.html')
+    return render(request, 'AcercaDe.html')
+
+# 8. Vista para la pagina de Contacto.
+def contacto(request):
+    """Muestra el formulario o información de contacto (por ahora solo la plantilla)."""
+    return render(request, 'contacto.html')
+

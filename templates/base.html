@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block titulo %}Blog de Noticias{% endblock titulo %}</title>
+    <title>{% block titulo %}Inicio{% endblock titulo %}</title>
 
     {# Enlazar tu archivo CSS estático (asumiendo que tienes una carpeta 'static') #}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     
     {# Bloque para CSS adicional específico de una plantilla #}
     {% block extra_css %}{% endblock extra_css %}
@@ -17,15 +17,25 @@
     {# 🚨 INICIO DE LA SECCIÓN CORREGIDA: Header con Flexbox para separar Inicio y Auth 🚨 #}
     <header style="padding: 10px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
         
-        <h1><a href="{% url 'publicaciones:lista' %}" style="text-decoration: none; color: #333;">BLOG DE NOTICIAS</a></h1>
+        <h1><a href="{% url 'publicaciones:lista' %}" style="text-decoration: none; color: #727070;">Red Campo</a></h1>
         
         <div style="display: flex; align-items: center;">
             
-            {# NAV PRINCIPAL (INICIO) #}
+            {# NAV PRINCIPAL (INICIO, ACERCA DE, CONTACTO) 🚨 BLOQUE MODIFICADO 🚨 #}
             <nav class="nav-principal" style="margin-right: 20px;">
+                
                 <a href="{% url 'publicaciones:lista' %}" style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #f8f8f8;">
                     🏠 Inicio
                 </a>
+                
+                <a href="{% url 'publicaciones:acerca' %}" style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #f8f8f8; margin-left: 10px;">
+                    Acerca de Nosotros
+                </a>
+                
+                <a href="{% url 'publicaciones:contacto' %}" style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #f8f8f8; margin-left: 10px;">
+                    Contacto
+                </a>
+                
             </nav>
 
             {# NAV AUTENTICACIÓN (LOGIN / REGISTRO / USUARIO) #}
@@ -41,20 +51,20 @@
                         </button>
                     </form>
 
-                    {# Botón para crear publicación #}
+                    {# Botón para crear publicación (Mantiene la lógica original) #}
                     {% if puede_crear %} 
                         | <a href="{% url 'publicaciones:crear' %}" style="margin-left: 10px;">
                             <button style="background-color: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Registrar Publicacion</button>
                         </a>
                     {% endif %}
                     
-                    {# Enlace Admin #}
+                    {# Enlace Admin (Mantiene la lógica original) #}
                     {% if user.is_superuser %}
                         | <a href="{% url 'admin:index' %}" style="margin-left: 10px;">Panel Admin</a>
                     {% endif %}
 
                 {% else %}
-                    {# Botones destacados para visitantes #}
+                    {# Botones destacados para visitantes (Mantiene la lógica original) #}
                     <a href="{% url 'login' %}" style="text-decoration: none; padding: 5px 10px; border: 1px solid #007bff; border-radius: 4px; background-color: #e9f5ff; color: #007bff; font-weight: bold; margin-right: 10px;">
                         Iniciar Sesión
                     </a>

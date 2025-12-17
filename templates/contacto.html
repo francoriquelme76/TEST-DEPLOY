@@ -1,0 +1,53 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+{% block titulo %}Contacto{% endblock titulo %}
+
+{% block extra_css %}
+    {# 🚨 Conexión del CSS específico para este formulario 🚨 #}
+    <link rel="stylesheet" href="{% static 'css/Form.css' %}">
+{% endblock extra_css %}
+
+{% block contenido %}
+
+    <section class="contact-section">
+        <h2 class="section-title">Hablemos</h2>
+        <p class="section-description">Si tienes alguna pregunta, sugerencia o propuesta de colaboración, por favor, rellena el siguiente formulario y nos pondremos en contacto contigo lo antes posible.</p>
+
+        {# La acción del formulario se dirige a la misma URL para manejar la lógica de envío en la vista #}
+        <form action="{% url 'publicaciones:contacto' %}" method="POST" class="contact-form">
+            {% csrf_token %} {# 🚨 REQUERIDO POR DJANGO para seguridad 🚨 #}
+            
+            <div class="form-group">
+                <label for="nombre">Nombre Completo:</label>
+                <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre y apellido">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" name="email" required placeholder="tu.correo@ejemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label for="asunto">Asunto:</label>
+                <input type="text" id="asunto" name="asunto" placeholder="Motivo de tu mensaje">
+            </div>
+
+            <div class="form-group">
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" required rows="6" placeholder="Escribe aquí tu consulta o mensaje..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+        </form>
+    </section>
+
+    <section class="contact-info" style="margin-top: 40px;">
+        <h3>Información Adicional</h3>
+        <ul>
+            <li>📧 Email: <a href="mailto:contacto@miblog.com">RedCampo2025@miblog.com</a></li>
+            <li>🔗 Redes Sociales: RedCampo.2025</li>
+        </ul>
+    </section>
+    
+{% endblock contenido %}
