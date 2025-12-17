@@ -17,7 +17,7 @@
     {# 🚨 INICIO DE LA SECCIÓN CORREGIDA: Header con Flexbox para separar Inicio y Auth 🚨 #}
     <header style="padding: 10px 20px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
         
-        <h1><a href="{% url 'publicaciones:lista' %}" style="text-decoration: none; color: #727070;">Red Campo</a></h1>
+        <h1><a href="{% url 'publicaciones:lista' %}" style="text-decoration: none; color: #fcfcfc;">Red Campo</a></h1>
         
         <div style="display: flex; align-items: center;">
             
@@ -41,7 +41,7 @@
             {# NAV AUTENTICACIÓN (LOGIN / REGISTRO / USUARIO) #}
             <nav class="nav-auth">
                 {% if user.is_authenticated %}
-                    <span>Hola, <b>{{ user.username }}</b> | </span>
+                    <span style="color: #ddd;">Hola, <b>{{ user.username }}</b> | </span>
                     
                     {# Enlace de Cerrar Sesión #}
                     <form action="{% url 'logout' %}" method="post" style="display:inline;">
