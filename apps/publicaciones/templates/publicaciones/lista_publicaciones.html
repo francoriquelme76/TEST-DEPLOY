@@ -22,45 +22,70 @@
     {# ----------------------------------------------------------- #}
 
     {# 🚨 INICIO DE LA LÓGICA DE CATEGORÍAS 🚨 #}
-    {% if categorias %}
-        <h3>Selecciona una Categoría:</h3>
-        <ul style="list-style: none; padding: 0;">
-            {% for categoria in categorias %}
-                <li style="display: inline; margin-right: 15px;">
-                    {# El enlace que filtra por categoría #}
-                    <a href="{% url 'publicaciones:por_categoria' slug_categoria=categoria.slug %}">
-                        [ {{ categoria.nombre }} ]
-                    </a>
-                </li>
-            {% empty %}
-                 <p>No hay categorías disponibles.</p>
-            {% endfor %}
-        </ul>
-        <hr>
-        
-        {# Opción para volver a la lista completa si estamos en una vista filtrada #}
+    <div class="barra-info">
+    <span style="color: #6c757d;">Mostrando:</span> 
+    <strong style="color: #0d6efd;">
         {% if categoria_actual %}
-            <p><a href="{% url 'publicaciones:lista' %}">Mostrar todas las publicaciones</a></p>
-            <hr>
+            {{ categoria_actual|title }}
+        {% else %}
+            Todas las noticias
         {% endif %}
+    </strong>
+    <span style="color: #6c757d; margin: 0 10px;">|</span>
+    <span style="color: #6c757d;">Orden:</span> 
+    <strong>
+        {% if orden_actual == 'antiguo' %}⏳ Antiguas
+        {% elif orden_actual == 'comentarios' %}💬 Populares
+        {% else %}📅 Recientes{% endif %}
+    </strong>
+
+    {% if categoria_actual or orden_actual != 'reciente' %}
+        <a href="?" style="float: right; color: #dc3545; text-decoration: none; font-size: 0.9em;">✖ Limpiar</a>
     {% endif %}
+</div>
 
-    <div class="orden-container" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <span style="font-weight: bold; color: #555;">Ordenar por:</span>
-        
-        <a href="?orden=reciente" class="btn-orden {% if orden_actual == 'reciente' or not orden_actual %}activo{% endif %}">
-            📅 Más recientes
-        </a>
+{% if categorias %}
+    <h3 style="margin-bottom: 15px;">Selecciona una Categoría:</h3>
+    <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+        <li style="display: inline; margin-right: 15px;">
+            <a href="?orden={{ orden_actual|default:'reciente' }}" 
+               class="enlace-filtro {% if not categoria_actual %}activo-categoria{% endif %}">
+                [ Todas ]
+            </a>
+        </li>
+        {% for categoria in categorias %}
+            <li style="display: inline; margin-right: 15px;">
+                <a href="?categoria={{ categoria.slug }}&orden={{ orden_actual|default:'reciente' }}" 
+                   class="enlace-filtro {% if categoria_actual == categoria.slug %}activo-categoria{% endif %}">
+                    [ {{ categoria.nombre }} ]
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <hr>
+{% endif %}
 
-        <a href="?orden=antiguo" class="btn-orden {% if orden_actual == 'antiguo' %}activo{% endif %}">
-            ⏳ Más antiguas
-        </a>
+<div style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+    <span style="font-weight: bold; color: #555;">Ordenar por:</span>
+    
+    <a href="?categoria={{ categoria_actual|default:'' }}&orden=reciente" 
+       class="btn-orden {% if orden_actual == 'reciente' or not orden_actual %}activo-orden{% endif %}"
+       style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; border-radius: 5px;">
+        📅 Recientes
+    </a>
 
-        <a href="?orden=comentarios" class="btn-orden {% if orden_actual == 'comentarios' %}activo{% endif %}">
-            💬 Más populares
-        </a>
-    </div>
+    <a href="?categoria={{ categoria_actual|default:'' }}&orden=antiguo" 
+       class="btn-orden {% if orden_actual == 'antiguo' %}activo-orden{% endif %}"
+       style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; border-radius: 5px;">
+        ⏳ Antiguas
+    </a>
 
+    <a href="?categoria={{ categoria_actual|default:'' }}&orden=comentarios" 
+       class="btn-orden {% if orden_actual == 'comentarios' %}activo-orden{% endif %}"
+       style="text-decoration: none; padding: 5px 10px; border: 1px solid #ccc; border-radius: 5px;">
+        💬 Populares
+    </a>
+</div>
     {# 🚨 FIN DE LA LÓGICA DE CATEGORÍAS 🚨 #}
 
     {# Lista de Publicaciones #}

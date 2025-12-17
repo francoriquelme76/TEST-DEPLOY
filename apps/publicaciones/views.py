@@ -26,12 +26,16 @@ class explorarPublicaciones(ListView):
     paginate_by = 10 
 
     def get_queryset(self):
-        queryset = Publicacion.objects.all()
+        queryset = super().get_queryset()
         # 1. Contamos los comentarios y añadimos el campo num_comentarios
         queryset = queryset.annotate(num_comentarios=Count('comentarios'))
 
-        # 2. Obtenemos el parámetro 'orden' de la URL (por defecto, 'reciente')
-        orden = self.request.GET.get('orden', 'reciente') 
+        # 2. Obtenemos los parametros 'orden' y slug de la URL
+        categoria_slug = self.request.GET.get('categoria')
+        orden = self.request.GET.get('orden')
+
+        if categoria_slug:
+            queryset = queryset.filter(categoria__slug = categoria_slug)
 
         # 3. ORDENAR
         if orden == 'antiguo':
@@ -52,6 +56,7 @@ class explorarPublicaciones(ListView):
         context = super().get_context_data(**kwargs)
         # 4. Guarda el orden actual para que la plantilla resalte el botón en HTML
         context['orden_actual'] = self.request.GET.get('orden', 'reciente')
+        context['categoria_actual'] = self.request.GET.get('categoria')
         context['categorias'] = Categoria.objects.all() 
         context['puede_crear'] = self.request.user.is_authenticated and self.request.user.has_perm('publicaciones.add_publicacion')
         return context
